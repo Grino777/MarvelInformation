@@ -5,10 +5,10 @@ import mjolnir from '../../resources/img/mjolnir.png';
 import './randomChar.scss';
 
 class RandomChar extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     // this.updateChar();
-    // }
+    constructor(props) {
+        super(props);
+        this.updateChar();
+    }
 
     state = {
         char: {
@@ -16,8 +16,8 @@ class RandomChar extends Component {
             description: null,
             thumbnail: null,
             homepage: null,
-            wiki: null,
-        },
+            wiki: null
+        }
     };
 
     marvelService = new MarvelService();
@@ -27,16 +27,22 @@ class RandomChar extends Component {
     };
 
     updateChar = () => {
-        // const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        this.marvelService.getCharacter(1011031).then(this.onCharLoaded);
+        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        this.marvelService.getCharacter(id).then(this.onCharLoaded);
     };
 
     render() {
-        this.updateChar();
-
-        const {
-            char: { name, description, thumbnail, homepage, wiki },
+        let {
+            char: { name, description, thumbnail, homepage, wiki }
         } = this.state;
+
+        if (!description) {
+            description = '*Данные персонажа скрыты*';
+        }
+
+        if (description.length >= 100) {
+            description = description.slice(0, 100) + '...';
+        }
 
         return (
             <div className="randomchar">
