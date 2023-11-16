@@ -9,6 +9,7 @@ import './randomChar.scss';
 class RandomChar extends Component {
     state = {
         char: {
+            id: null,
             name: null,
             description: null,
             thumbnail: null,
@@ -23,10 +24,6 @@ class RandomChar extends Component {
 
     componentDidMount() {
         this.updateChar();
-    }
-
-    componentDidUpdate() {
-        console.log('update');
     }
 
     onCharLoaded = (char) => {
@@ -99,8 +96,6 @@ const CharBlock = ({ char }) => {
         'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
             ? 'contain'
             : 'cover';
-
-    console.log(thumbnailStyle);
 
     return (
         <div className="randomchar__block">

@@ -15,9 +15,13 @@ class MarvelService {
     };
 
     getAllCharacters = async () => {
-        return await this.getData(
+        let characters = await this.getData(
             `${this._url}characters?limit=9&offset=210&${this._apiKey}`
-        );
+        ).then((res) => {
+            return res.data.results.map(this._transformCharData);
+        });
+
+        return characters;
     };
 
     getCharacter = async (id) => {
@@ -30,7 +34,7 @@ class MarvelService {
 
     _transformCharData = (char) => {
         let { description } = char;
-        const { name, thumbnail, urls } = char;
+        const { id, name, thumbnail, urls } = char;
 
         if (!description) {
             description = '*Данные персонажа скрыты*';
@@ -41,6 +45,7 @@ class MarvelService {
         }
 
         return {
+            id: id,
             name: name,
             description: description,
             thumbnail: `${thumbnail['path']}.${thumbnail['extension']}`,
