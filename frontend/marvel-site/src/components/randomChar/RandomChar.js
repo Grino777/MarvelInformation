@@ -25,9 +25,21 @@ class RandomChar extends Component {
         this.updateChar();
     }
 
+    componentDidUpdate() {
+        console.log('update');
+    }
+
     onCharLoaded = (char) => {
-        console.log(char);
-        this.setState({ char, loading: false });
+        this.setState({
+            char,
+            loading: false,
+        });
+    };
+
+    onCharLoading = () => {
+        this.setState({
+            loading: true,
+        });
     };
 
     onError = () => {
@@ -39,6 +51,7 @@ class RandomChar extends Component {
 
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        this.onCharLoading();
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
@@ -47,12 +60,9 @@ class RandomChar extends Component {
 
     render() {
         const { char, loading, error } = this.state;
-
         const errorMessage = error ? <ErrorMessage /> : null;
-
-        const content = !(loading || error) ? <CharBlock char={char} /> : null;
-
         const spinner = loading ? <Spinner /> : null;
+        const content = !(loading || error) ? <CharBlock char={char} /> : null;
 
         return (
             <div className="randomchar">
@@ -66,12 +76,10 @@ class RandomChar extends Component {
                         Do you want to get to know him better?
                     </p>
                     <p className="randomchar__title">Or choose another one</p>
-                    <button className="button button__main">
-                        <div className="inner"
-                        //  onClick={this.updateChar}
-                         >
-                            try it
-                        </div>
+                    <button className="button button__main"
+                        onClick={this.updateChar}
+                    >
+                        <div className="inner">try it</div>
                     </button>
                     <img
                         src={mjolnir}
@@ -85,8 +93,14 @@ class RandomChar extends Component {
 }
 
 const CharBlock = ({ char }) => {
-    console.log(char);
     const { name, description, thumbnail, homepage, wiki } = char;
+    let thumbnailStyle =
+        thumbnail ===
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+            ? 'contain'
+            : 'cover';
+
+    console.log(thumbnailStyle);
 
     return (
         <div className="randomchar__block">
@@ -94,6 +108,7 @@ const CharBlock = ({ char }) => {
                 src={thumbnail}
                 alt="Random character"
                 className="randomchar__img"
+                style={{ objectFit: thumbnailStyle }}
             />
             <div className="randomchar__info">
                 <p className="randomchar__name">{name}</p>
