@@ -29,12 +29,25 @@ class MarvelService {
     };
 
     _transformCharData = (char) => {
+        let { description } = char;
+        const {name, thumbnail, homepage, wiki} = char;
+
+        if (!description) {
+            description = '*Данные персонажа скрыты*';
+        }
+
+        if (description.length >= 100) {
+            description = description.slice(0, 100) + '...';
+        }
+
+        console.log(char, description, );
+
         return {
-            name: char.name,
-            description: char.description,
-            thumbnail: `${char.thumbnail['path']}.${char.thumbnail['extension']}`,
-            homepage: char.urls[0].url,
-            wiki: char.urls[1].url,
+            name: name,
+            description: description,
+            thumbnail: `${thumbnail['path']}.${thumbnail['extension']}`,
+            homepage: homepage.urls[0].url,
+            wiki: wiki.urls[1].url,
         };
     };
 }

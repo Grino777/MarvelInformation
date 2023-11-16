@@ -1,17 +1,12 @@
 import { Component } from 'react';
 import MarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/spinner';
 import ErrorMessage from '../error/ErrorMessage';
+import Spinner from '../spinner/spinner';
 
 import mjolnir from '../../resources/img/mjolnir.png';
 import './randomChar.scss';
 
 class RandomChar extends Component {
-    constructor(props) {
-        super(props);
-        this.updateChar();
-    }
-
     state = {
         char: {
             name: null,
@@ -26,7 +21,12 @@ class RandomChar extends Component {
 
     marvelService = new MarvelService();
 
+    componentDidMount() {
+        this.updateChar();
+    }
+
     onCharLoaded = (char) => {
+        console.log(char);
         this.setState({ char, loading: false });
     };
 
@@ -67,7 +67,11 @@ class RandomChar extends Component {
                     </p>
                     <p className="randomchar__title">Or choose another one</p>
                     <button className="button button__main">
-                        <div className="inner">try it</div>
+                        <div className="inner"
+                        //  onClick={this.updateChar}
+                         >
+                            try it
+                        </div>
                     </button>
                     <img
                         src={mjolnir}
@@ -81,15 +85,8 @@ class RandomChar extends Component {
 }
 
 const CharBlock = ({ char }) => {
-    let { name, description, thumbnail, homepage, wiki } = char;
-
-    if (!description) {
-        description = '*Данные персонажа скрыты*';
-    }
-
-    if (description.length >= 100) {
-        description = description.slice(0, 100) + '...';
-    }
+    console.log(char);
+    const { name, description, thumbnail, homepage, wiki } = char;
 
     return (
         <div className="randomchar__block">
