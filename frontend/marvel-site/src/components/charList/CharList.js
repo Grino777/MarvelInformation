@@ -33,10 +33,10 @@ class CharList extends Component {
         let items;
         console.log(charsList);
         if (!charsList || charsList.length === 0) {
-            return <li key={0}></li>
+            return <li key={0}></li>;
         } else {
             items = charsList.map((item) => {
-                return <CharBlock char={item} />;
+                return <CharBlock key={item.id} char={item} />;
             });
         }
 
@@ -70,11 +70,13 @@ class CharList extends Component {
 </ul>; */
 
 const CharBlock = ({ char }) => {
-    const { id, name, thumbnail } = char;
+    const { name, thumbnail } = char;
+
+    const imgStyle = 'unset';
 
     return (
-        <li className="char__item" key={id}>
-            <img src={thumbnail} alt={name} />
+        <li className="char__item">
+            <img src={thumbnail} alt={name} style={{ objectFit: imgStyle }} />
             <div className="char__name">{name}</div>
         </li>
     );
