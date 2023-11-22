@@ -9,7 +9,7 @@
             "name": "ReactRun",
             "request": "launch",
             "type": "node-terminal",
-            "cwd": "${workspaceFolder}\\frontend\\marvel-site"
+            "cwd": "${workspaceFolder}/frontend/marvel-site"
         },
         {
             "name": "Python: Flask",
@@ -17,7 +17,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "${workspaceFolder}\\backend\\app.py",
+                "FLASK_APP": "${workspaceFolder}/backend/app.py",
                 "FLASK_DEBUG": "1"
             },
             "args": [
