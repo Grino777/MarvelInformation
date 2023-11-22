@@ -14,11 +14,11 @@ class CharList extends Component {
 
     marvelService = new MarvelService();
 
-    async componentDidMount() {
-        const charsList = await this.marvelService
+    componentDidMount() {
+        this.marvelService
             .getAllCharacters()
+            .then(this.onLoaded)
             .catch(this.onError);
-        this.onLoaded(charsList);
     }
 
     onLoaded = (charsList) => {
@@ -61,13 +61,6 @@ class CharList extends Component {
         );
     }
 }
-
-/* <ul className="char__grid">
-        <li className="char__item" key={id}>
-            <img src={thumbnail} alt={name} />
-            <div className="char__name">{name}</div>
-        </li>
-</ul>; */
 
 const CharBlock = ({ char }) => {
     const { name, thumbnail } = char;
