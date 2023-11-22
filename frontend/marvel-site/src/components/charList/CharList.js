@@ -31,9 +31,8 @@ class CharList extends Component {
 
     renderAllChars(charsList) {
         let items;
-        console.log(charsList);
         if (!charsList || charsList.length === 0) {
-            return <li key={0}></li>;
+            items = null;
         } else {
             items = charsList.map((item) => {
                 return <CharBlock key={item.id} char={item} />;
