@@ -35,7 +35,13 @@ class CharList extends Component {
             items = null;
         } else {
             items = charsList.map((item) => {
-                return <CharBlock key={item.id} char={item} />;
+                return (
+                    <CharBlock
+                        key={item.id}
+                        char={item}
+                        onSelectChar={this.props.onSelectChar}
+                    />
+                );
             });
         }
 
@@ -61,13 +67,19 @@ class CharList extends Component {
     }
 }
 
-const CharBlock = ({ char }) => {
-    const { name, thumbnail } = char;
+const CharBlock = ({ char, onSelectChar }) => {
+    const { id, name, thumbnail } = char;
 
     const imgStyle = 'unset';
 
     return (
-        <li className="char__item">
+        <li
+            className="char__item"
+            onClick={() => {
+                console.log(onSelectChar);
+                onSelectChar(id);
+            }}
+        >
             <img src={thumbnail} alt={name} style={{ objectFit: imgStyle }} />
             <div className="char__name">{name}</div>
         </li>
