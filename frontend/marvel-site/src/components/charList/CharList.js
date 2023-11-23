@@ -76,7 +76,6 @@ const CharBlock = ({ char, onSelectChar }) => {
         <li
             className="char__item"
             onClick={() => {
-                console.log(onSelectChar);
                 onSelectChar(id);
             }}
         >

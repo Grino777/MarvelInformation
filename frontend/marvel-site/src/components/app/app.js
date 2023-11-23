@@ -9,11 +9,11 @@ import decoration from '../../resources/img/vision.png';
 
 class App extends Component {
     state = {
-        charID: null,
+        charId: false,
     };
 
     selectedChar = (id) => {
-        this.setState({ charID: id });
+        this.setState({ charId: id });
     };
 
     onSelectChar = (id) => {
@@ -28,7 +28,7 @@ class App extends Component {
                     <RandomChar />
                     <div className="char__content">
                         <CharList onSelectChar={this.onSelectChar}/>
-                        <CharInfo charID={this.state.charID}/>
+                        <CharInfo charId={this.state.charId}/>
                     </div>
                     <img
                         className="bg-decoration"

@@ -1,17 +1,16 @@
 import { Component } from 'react';
 
-import Spinner from '../spinner/Spinner';
+import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../error/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
-import MarvelService from '../../services/MarvelService';
+import Spinner from '../spinner/Spinner';
 
-import thor from '../../resources/img/thor.jpeg';
 import './charInfo.scss';
 
 class CharInfo extends Component {
     state = {
-        char: null,
-        loading: true,
+        char: false,
+        loading: false,
         error: false,
     };
 
@@ -26,7 +25,7 @@ class CharInfo extends Component {
     };
 
     onCharLoaded = (char) => {
-        this.setState({ char: char, loading: false });
+        this.setState({ char, loading: false });
     };
 
     updateChar = () => {
@@ -48,38 +47,43 @@ class CharInfo extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.userID !== prevProps.userID) {
+        if (this.props.charId !== prevProps.charId) {
             this.updateChar();
         }
     }
 
     render() {
-        const { char, loading, error } = this.props;
+        const { char, loading, error } = this.state;
 
-        const skeleton = char || loading || error ? <Skeleton /> : null;
+        const skeleton = char || loading || error ? false : <Skeleton />;
         const errorMessage = error ? <ErrorMessage /> : false;
-        const spinner = loading ? <Spinner /> : null;
+        const spinner = loading ? <Spinner /> : false;
         const content = !(loading || error || !char) ? (
             <View char={char} />
-        ) : null;
+        ) : (
+            false
+        );
 
         return (
             <div className="char__info">
-                {skeleton}
                 {errorMessage}
                 {spinner}
                 {content}
+                {skeleton}
             </div>
         );
     }
 }
 
-const View = (char) => {
+const View = ({ char }) => {
     const { name, description, thumbnail, comics, homepage, wiki } = char;
+    const thumbStyle = { objectFit: 'unset' };
+    const comicsListStyle = comics.length === 0 ? { display: 'none' } : {};
+
     return (
         <>
             <div className="char__basics">
-                <img src={thumbnail} alt={name} />
+                <img src={thumbnail} alt={name} style={thumbStyle} />
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">
@@ -92,17 +96,25 @@ const View = (char) => {
                     </div>
                 </div>
             </div>
-            <div className="char__descr">
-                {description}
+            <div className="char__descr">{description}</div>
+            <div className="char__comics" style={comicsListStyle}>
+                Comics:
             </div>
-            <div className="char__comics">Comics:</div>
-            <ul className="char__comics-list">
-                <li className="char__comics-item">
-                    All-Winners Squad: Band of Heroes (2011) #3
-                </li>
-            </ul>
+            <ComicsBlock comics={comics} />
         </>
     );
+};
+
+const ComicsBlock = ({ comics }) => {
+    const comicsList = comics.map((item, id) => {
+        return (
+            <li className="char__comics-item" key={id}>
+                {item.name}
+            </li>
+        );
+    });
+
+    return <ul className="char__comics-list">{comicsList}</ul>;
 };
 
 export default CharInfo;
