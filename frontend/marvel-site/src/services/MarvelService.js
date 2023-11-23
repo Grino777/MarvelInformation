@@ -34,7 +34,7 @@ class MarvelService {
 
     _transformCharData = (char) => {
         let { description } = char;
-        const { id, name, thumbnail, urls } = char;
+        const { id, name, thumbnail, urls, comics } = char;
 
         if (!description) {
             description = '*Данные персонажа скрыты*';
@@ -51,6 +51,7 @@ class MarvelService {
             thumbnail: `${thumbnail['path']}.${thumbnail['extension']}`,
             homepage: urls[0].url,
             wiki: urls[1].url,
+            comics: comics.items,
         };
     };
 }

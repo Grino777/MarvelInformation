@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../error/ErrorMessage';
-import Spinner from '../spinner/spinner';
+import Spinner from '../spinner/Spinner';
 
 import './charList.scss';
 
