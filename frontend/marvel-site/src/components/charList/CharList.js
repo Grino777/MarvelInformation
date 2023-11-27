@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import { Component } from 'react';
+
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../error/ErrorMessage';
 import Spinner from '../spinner/Spinner';
@@ -93,7 +95,7 @@ class CharList extends Component {
                 <button
                     className="button button__main button__long"
                     disabled={loading}
-                    style={{'display': ended ? 'none' : 'block'}}
+                    style={{ display: ended ? 'none' : 'block' }}
                     onClick={() => this.updateCharacters()}
                 >
                     <div className="inner">load more</div>
@@ -119,6 +121,11 @@ const CharBlock = ({ char, onSelectChar }) => {
             <div className="char__name">{name}</div>
         </li>
     );
+};
+
+CharList.propTypes = {
+    onSelectChar: PropTypes.func,
+    offset: PropTypes.number,
 };
 
 export default CharList;
