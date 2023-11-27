@@ -14,11 +14,16 @@ class MarvelService {
         return await res.json();
     };
 
-    getAllCharacters = () => {
+    getAllCharacters = (offset = 210) => {
         let characters = this.getData(
-            `${this._url}characters?limit=9&offset=210&${this._apiKey}`
+            `${this._url}characters?limit=9&offset=${offset}&${this._apiKey}`
         ).then((res) => {
-            return res.data.results.map(this._transformCharData);
+            const data = res.data.results;
+            if (data.length === 0) {
+                return;
+            } else {
+                return data.map(this._transformCharData);
+            }
         });
 
         return characters;

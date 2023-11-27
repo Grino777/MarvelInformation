@@ -10,6 +10,7 @@ import decoration from '../../resources/img/vision.png';
 class App extends Component {
     state = {
         charId: false,
+        startOffset: 1550,
     };
 
     selectedChar = (id) => {
@@ -21,13 +22,17 @@ class App extends Component {
     };
 
     render() {
+        const {startOffset} = this.state
         return (
             <div className="app">
                 <AppHeader />
                 <main>
                     <RandomChar />
                     <div className="char__content">
-                        <CharList onSelectChar={this.onSelectChar}/>
+                        <CharList 
+                        onSelectChar={this.onSelectChar}
+                        offset={startOffset}
+                        />
                         <CharInfo charId={this.state.charId}/>
                     </div>
                     <img

@@ -10,19 +10,44 @@ class CharList extends Component {
         charsList: [],
         loading: false,
         error: false,
+        offset: +this.props.offset,
+        ended: false,
+        loadingNewChars: false,
     };
 
     marvelService = new MarvelService();
 
+    updateCharacters = () => {
+        const { ended } = this.state;
+
+        if (!ended) {
+            this.onLoading();
+            this.marvelService
+                .getAllCharacters(this.state.offset)
+                .then(this.onLoaded)
+                .catch(this.onError);
+            this.onUpdateOffset();
+        }
+    };
+
     componentDidMount() {
-        this.marvelService
-            .getAllCharacters()
-            .then(this.onLoaded)
-            .catch(this.onError);
+        this.updateCharacters();
     }
 
+    onLoading = () => {
+        this.setState({ loading: true });
+    };
+
     onLoaded = (charsList) => {
-        this.setState({ charsList, loading: false });
+        const oldList = this.state.charsList;
+        if (charsList.length < 9) {
+            this.setState({ ended: true });
+        }
+
+        this.setState({
+            charsList: [...oldList, ...charsList],
+            loading: false,
+        });
     };
 
     onError = () => {
@@ -48,8 +73,14 @@ class CharList extends Component {
         return <ul className="char__grid">{items}</ul>;
     }
 
+    onUpdateOffset = () => {
+        const { offset } = this.state;
+        this.setState({ offset: +offset + 9 });
+    };
+
+    // -----------------------render----------------------
     render() {
-        let { charsList, loading, error } = this.state;
+        let { charsList, loading, error, ended } = this.state;
         charsList = this.renderAllChars(charsList);
         const spinner = loading ? <Spinner /> : false;
         const errorMessage = error ? <ErrorMessage /> : false;
@@ -59,7 +90,12 @@ class CharList extends Component {
                 {errorMessage}
                 {spinner}
                 {charsList}
-                <button className="button button__main button__long">
+                <button
+                    className="button button__main button__long"
+                    disabled={loading}
+                    style={{'display': ended ? 'none' : 'block'}}
+                    onClick={() => this.updateCharacters()}
+                >
                     <div className="inner">load more</div>
                 </button>
             </div>
