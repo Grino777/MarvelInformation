@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../error/ErrorMessage';
@@ -19,23 +19,14 @@ class CharList extends Component {
 
     marvelService = new MarvelService();
 
-    updateCharacters = () => {
-        const { ended } = this.state;
-
-        if (!ended) {
-            this.onLoading();
-            this.marvelService
-                .getAllCharacters(this.state.offset)
-                .then(this.onLoaded)
-                .catch(this.onError);
-            this.onUpdateOffset();
-        }
-    };
-
+    //-------------component methods--------------
     componentDidMount() {
         this.updateCharacters();
     }
 
+    //-------------end component methods-----------
+
+    //-------------setState block------------------
     onLoading = () => {
         this.setState({ loading: true });
     };
@@ -56,6 +47,28 @@ class CharList extends Component {
         this.setState({ error: true });
     };
 
+    onUpdateOffset = () => {
+        const { offset } = this.state;
+        this.setState({ offset: +offset + 9 });
+    };
+
+    //-------------end setState block-----------------
+
+    //-------------methods block----------------------
+
+    updateCharacters = () => {
+        const { ended } = this.state;
+
+        if (!ended) {
+            this.onLoading();
+            this.marvelService
+                .getAllCharacters(this.state.offset)
+                .then(this.onLoaded)
+                .catch(this.onError);
+            this.onUpdateOffset();
+        }
+    };
+
     renderAllChars(charsList) {
         let items;
         if (!charsList || charsList.length === 0) {
@@ -74,13 +87,9 @@ class CharList extends Component {
 
         return <ul className="char__grid">{items}</ul>;
     }
+    //--------------end methods block-------------------
 
-    onUpdateOffset = () => {
-        const { offset } = this.state;
-        this.setState({ offset: +offset + 9 });
-    };
-
-    // -----------------------render----------------------
+    // -----------------------render--------------------
     render() {
         let { charsList, loading, error, ended } = this.state;
         charsList = this.renderAllChars(charsList);
@@ -110,12 +119,27 @@ const CharBlock = ({ char, onSelectChar }) => {
 
     const imgStyle = 'unset';
 
+    const onFocus = (e) => {
+        e.target.classList.add('char__item_selected');
+        e.target.focus();
+    };
+
     return (
         <li
             className="char__item"
             tabIndex={0}
-            onClick={() => {
+            onClick={(e) => {
                 onSelectChar(id);
+                onFocus(e);
+            }}
+            onFocus={(e) => {
+                onFocus(e);
+            }}
+            onKeyDown={(e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    onSelectChar(id);
+                    onFocus(e);
+                }
             }}
         >
             <img src={thumbnail} alt={name} style={{ objectFit: imgStyle }} />
@@ -127,6 +151,10 @@ const CharBlock = ({ char, onSelectChar }) => {
 CharList.propTypes = {
     onSelectChar: PropTypes.func,
     offset: PropTypes.number,
+};
+
+CharBlock.propTypes = {
+    selectedChar: PropTypes.func,
 };
 
 export default CharList;
