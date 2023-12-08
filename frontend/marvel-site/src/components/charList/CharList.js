@@ -106,13 +106,14 @@ class CharList extends Component {
 }
 
 const CharBlock = ({ char, onSelectChar }) => {
-    const { id, name, thumbnail } = char;
+    const { id, name, thumbnail} = char;
 
     const imgStyle = 'unset';
 
     return (
         <li
             className="char__item"
+            tabIndex={0}
             onClick={() => {
                 onSelectChar(id);
             }}
