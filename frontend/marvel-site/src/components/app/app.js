@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import AppHeader from '../appHeader/AppHeader';
 import CharInfo from '../charInfo/CharInfo';
@@ -7,43 +7,31 @@ import RandomChar from '../randomChar/RandomChar';
 
 import decoration from '../../resources/img/vision.png';
 
-class App extends Component {
-    state = {
-        charId: false,
-        startOffset: 1550,
+const App = () => {
+
+    const [charId, setCharId] = useState(null)
+    const [startOffset, setStartOffset] = useState(1550)
+
+    const onSelectChar = (id) => {
+        setCharId(id)
     };
 
-    selectedChar = (id) => {
-        this.setState({ charId: id });
-    };
-
-    onSelectChar = (id) => {
-        this.selectedChar(id);
-    };
-
-    render() {
-        const {startOffset} = this.state
-        return (
-            <div className="app">
-                <AppHeader />
-                <main>
-                    <RandomChar />
-                    <div className="char__content">
-                        <CharList 
-                        onSelectChar={this.onSelectChar}
+    return (
+        <div className="app">
+            <AppHeader />
+            <main>
+                <RandomChar />
+                <div className="char__content">
+                    <CharList
+                        onSelectChar={onSelectChar}
                         offset={startOffset}
-                        />
-                        <CharInfo charId={this.state.charId}/>
-                    </div>
-                    <img
-                        className="bg-decoration"
-                        src={decoration}
-                        alt="vision"
                     />
-                </main>
-            </div>
-        );
-    }
-}
+                    <CharInfo charId={charId} />
+                </div>
+                <img className="bg-decoration" src={decoration} alt="vision" />
+            </main>
+        </div>
+    );
+};
 
 export default App;
