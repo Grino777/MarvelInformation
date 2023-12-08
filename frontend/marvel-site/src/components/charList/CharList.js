@@ -20,7 +20,7 @@ const CharList = (props) => {
     //-------------component methods--------------
     useEffect(() => {
         updateCharacters();
-    });
+    }, []);
 
     //-------------end component methods-----------
 
@@ -56,6 +56,7 @@ const CharList = (props) => {
             onLoading();
             marvelService
                 .getAllCharacters(offset)
+                .then(setCharsList)
                 .then(onLoaded)
                 .catch(onError);
             onUpdateOffset();

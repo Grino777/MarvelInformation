@@ -44,7 +44,7 @@ const CharInfo = (props) => {
 
     useEffect(() => {
         updateChar();
-    }, [updateChar]);
+    }, [char]);
 
     const skeleton = char || loading || error ? false : <Skeleton />;
     const errorMessage = error ? <ErrorMessage /> : false;
