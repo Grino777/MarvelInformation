@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../error/ErrorMessage';
@@ -12,6 +12,7 @@ const CharInfo = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
+    const charId = props.charId;
     const marvelService = new MarvelService();
 
     const onLoading = () => {
@@ -22,29 +23,29 @@ const CharInfo = (props) => {
         setError(true);
     };
 
-    const onCharLoaded = (char) => {
+    const onCharLoaded = (char = {}) => {
         setChar(char);
         setLoading(false);
     };
 
     const updateChar = () => {
-        const { charId } = props;
         if (!charId) {
             return;
+        } else {
+            onLoading();
+            marvelService
+                .getCharacter(charId)
+                .then(onCharLoaded)
+                .catch((e) => {
+                    onError();
+                    console.log(e.message);
+                });
         }
-
-        onLoading();
-
-        marvelService.getCharacter(charId).then(onCharLoaded).catch(onError);
     };
 
     useEffect(() => {
         updateChar();
-    }, []);
-
-    useEffect(() => {
-        updateChar();
-    }, [char]);
+    }, [charId]);
 
     const skeleton = char || loading || error ? false : <Skeleton />;
     const errorMessage = error ? <ErrorMessage /> : false;
@@ -53,10 +54,10 @@ const CharInfo = (props) => {
 
     return (
         <div className="char__info">
-            {errorMessage}
-            {spinner}
-            {content}
             {skeleton}
+            {spinner}
+            {errorMessage}
+            {content}
         </div>
     );
 };

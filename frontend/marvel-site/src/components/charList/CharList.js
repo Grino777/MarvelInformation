@@ -13,30 +13,26 @@ const CharList = (props) => {
     const [error, setError] = useState(false);
     const [offset, setOffset] = useState(+props.offset);
     const [ended, setEnded] = useState(false);
-    const [loadingNewChars, setLoadingNewChars] = useState(false);
 
     const marvelService = new MarvelService();
 
-    //-------------component methods--------------
     useEffect(() => {
         updateCharacters();
     }, []);
 
-    //-------------end component methods-----------
-
-    //-------------setState block------------------
     const onLoading = () => {
         setLoading(true);
     };
 
-    const onLoaded = (charsList) => {
+    const onLoaded = (dataChars) => {
         const oldList = charsList;
-        if (charsList.length < 9) {
+        if (dataChars.length < 9) {
             setEnded(true);
         }
 
-        setCharsList([...oldList, ...charsList]);
+        setCharsList([...oldList, ...dataChars]);
         setLoading(false);
+        onUpdateOffset();
     };
 
     const onError = () => {
@@ -47,19 +43,16 @@ const CharList = (props) => {
         setOffset((offset) => offset + 9);
     };
 
-    //-------------end setState block-----------------
-
-    //-------------methods block----------------------
-
     const updateCharacters = () => {
         if (!ended) {
             onLoading();
             marvelService
                 .getAllCharacters(offset)
-                .then(setCharsList)
                 .then(onLoaded)
-                .catch(onError);
-            onUpdateOffset();
+                .catch((e) => {
+                    onError(e);
+                    console.log(e.message);
+                });
         }
     };
 
@@ -81,9 +74,6 @@ const CharList = (props) => {
 
         return <ul className="char__grid">{items}</ul>;
     };
-    //--------------end methods block-------------------
-
-    // -----------------------render--------------------
 
     const charsListArr = renderAllChars(charsList);
     const spinner = loading ? <Spinner /> : false;

@@ -10,7 +10,6 @@ class MarvelService {
         if (!res.ok) {
             throw Error(`Данный ${url} выдал ошибку: ${res.status}`);
         }
-
         return await res.json();
     };
 
